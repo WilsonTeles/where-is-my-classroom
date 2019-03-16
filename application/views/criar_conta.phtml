@@ -1,0 +1,55 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Criar Conta</title>
+    <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css') ?>">
+</head>
+<body>
+<div class="container">
+
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Criar Conta</h3>
+                    <?php echo validation_errors();
+                    if (isset($error)) { ?>
+                        <h4 style="color:red"><?php echo $error; ?> </h4>
+                    <?php
+                } ?>
+                    <?php echo form_open('home/salvarConta'); ?>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Nome" name="first_name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Sobrenome" name="last_name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Matrícula" name="enrollment_code">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Email" name="email">
+                    </div>
+                    <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Senha" name="password">
+                    </div>
+                    <?php echo form_submit('', 'Criar Conta', "class='btn btn-primary  btn-block'");
+                    echo form_close(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/javascript" src="<?php echo base_url('assets/js/jquery-3.3.1.min.js') ?>"></script>
+    <script type="application/javascript" src="<?php echo base_url('assets/js/popper.min.js') ?>"></script>
+    <script type="application/javascript" src="<?php echo base_url('assets/js/bootstrap.js') ?>"></script>
+
+</body>
+</html>

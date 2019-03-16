@@ -87,7 +87,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <div class="col-md-12">
       <div class="card-columns">
-        <?php if(!empty($table)): ?>
+        <?php if(!empty($this->session->userdata('table'))): ?>
         <?php foreach($table as $row) : ?>
           <div class="card">
             <div class="card-body">

@@ -5,6 +5,10 @@ class Classroom_model extends CI_Model
     {
         parent::__construct();
     }
+    public function criarConta($data){
+        $this->db->insert('user', $data);
+        return $this->db->insert_id();
+    }
     public function joinQuery($param)
     {
         $this->db->select('
@@ -121,7 +125,7 @@ class Classroom_model extends CI_Model
     public function getTurmasByUserId($id, $queryString)
     {
         $collection = $this->getDetalhesTurmasUsuario($id, $queryString);
-        $className[] = null;
+        $className = null;
         if (!empty($collection->result())) {
             $className = $this->getTableArray($collection);
         }

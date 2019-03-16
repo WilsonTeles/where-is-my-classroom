@@ -40,6 +40,43 @@ class Home extends CI_Controller
     {
         $this->load->view('login.phtml');
     }
+    public function criarConta(){
+        $this->load->view('criar_conta.phtml');
+    }
+
+    public function salvarConta(){
+        $this->load->library('form_validation');
+        $validLogin = false;
+        $this->form_validation->set_rules('first_name', 'Nome', 'required');
+        $this->form_validation->set_rules('last_name', 'Sobrenome', 'required');
+        $this->form_validation->set_rules('enrollment_code', 'Matricula', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+        $this->form_validation->set_rules('password', 'Senha', 'required');
+
+        if (!$this->form_validation->run()) {
+            $this->index();
+            //redirect('./');
+            //$this->load->view('home.phtml');
+        } else {
+            foreach ($_POST as $key => $value) {
+                $data[$key] = $this->input->post($key);
+            }
+            $data['is_admin'] = 0;
+            $email = $this->db->get_where('user', array('email' => $data['email']))->row();
+            $mat = $this->db->get_where('user', array('enrollment_code' => $data['enrollment_code']))->row();
+            if (isset($email) || isset($mat)){
+                var_dump($email);
+                var_dump($mat);
+            } else {
+                $last_id = $this->Classroom_model->criarConta($data);
+                $session = array('user_id' => $last_id, 'user_firstname' => $data['first_name'], 'is_admin' => $data['is_admin'], 'logged' => true);
+                $this->session->set_userdata($session);
+                redirect('user/user');
+            }
+
+            var_dump($data);
+        }
+    }
 
     public function loginValidate()
     {

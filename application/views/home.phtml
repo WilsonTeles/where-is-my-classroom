@@ -32,15 +32,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
   				<ul class="navbar-nav mr-auto">
           <?php
 
-if ($this->session->userdata('is_admin') != null) {
+if (!is_null($this->session->userdata('is_admin'))) {
     if ($this->session->userdata('is_admin')) {
         $title = 'Turmas';
         $link = site_url('admin/Admin');
-        $logout = site_url('/admin/admin/logout');
     } else {
         $title = 'Minhas Turmas';
         $link = site_url('user/User');
-        $logout = site_url('/user/user/logout');
     }
 
     ?>
@@ -58,10 +56,15 @@ if ($this->session->userdata('is_admin') != null) {
                 <?php echo form_submit('', 'Login', "class='form-control link-button'"); ?>
                 <?php echo form_close(); ?>
                 </li>
+                <li class="nav-item p1-3">
+                <?php echo form_open('home/criarConta'); ?>
+                <?php echo form_submit('', 'Criar Conta', "class='form-control link-button'"); ?>
+                <?php echo form_close(); ?>
+                </li>
             <?php else: ?>
                 <li class="nav-item"><span class="navbar-text"><?php echo $this->session->userdata('user_firstname') ?></span></li>
                 <li class="nav-item pl-3">
-                <button class='form-control link-button' onclick="window.location='<?php echo $logout ?>'">Logout</button>
+                <button class='form-control link-button' onclick="window.location='<?php echo ($this->session->userdata('is_admin') ? site_url('/admin/admin/logout') : site_url('/user/user/logout'))?>'">Logout</button>
             <?php endif;?>
   				</ul>
   			</div>
@@ -79,7 +82,6 @@ if ($this->session->userdata('is_admin') != null) {
         <div class="col-md-1">
           <?php echo form_submit('', 'Procurar', "class='btn btn-primary'"); ?>
           <?php echo form_close(); ?>
-          <!-- <button class="btn btn-primary">Procurar</button> -->
         </div>
     </div>
     </div>
@@ -112,7 +114,8 @@ if ($this->session->userdata('is_admin') != null) {
           </div>
 
       <?php endforeach;?>
-      <?php endif;?>          </div>
+      <?php endif;?>          
+      </div>
         </div>
       </div>
     </div>
