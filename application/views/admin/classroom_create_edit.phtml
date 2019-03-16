@@ -1,0 +1,251 @@
+<?php
+//defined('BASEPATH') or exit('No direct script access allowed');
+?>
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Login</title>
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css') ?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/home.css') ?>">
+</head>
+
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="dashboard-navbar(brand, role, activePage)">
+		<div class="container">
+			<a class="navbar-brand" href="<?php echo base_url() ?>">Where is my classroom</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a href="<?php echo site_url('admin/admin') ?>" class="nav-link">Turmas</a>
+					</li>
+					<li class="nav-item">
+						<a href="<?php echo site_url('admin/admin/subjects') ?>" class="nav-link">Matérias</a>
+					</li>
+					<li class="nav-item">
+						<a href="<?php echo site_url('admin/admin/teachers') ?>" class="nav-link">Professores</a>
+					</li>
+					<li class="nav-item">
+						<a href="<?php echo site_url('admin/admin/periods') ?>" class="nav-link">Períodos</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><span class="navbar-text">
+							<?php echo $this->db->get_where('user', array('id' => $user_id))->row()->first_name ?></span></li>
+					<li class="nav-item pl-3">
+						<button class='form-control link-button' onclick="window.location='<?php echo site_url('/admin/admin/logout') ?>'">Logout</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container mt-4">
+
+		<div class="row justify-content-center">
+			<div class="col-md-12">
+				<div class="registration-form card">
+					<div class="card-body">
+						<h3 class="card-title">
+						<?php 
+							$class = '';
+							if(!empty($turma)){
+								$class = $turma[0];
+							}
+							$verb = '';
+							if ($action == 'editar'){
+								$verb = "Editar ";
+								$actionUrl = 'admin/admin/editTurma';
+							} else if ($action == 'criar'){
+								$verb = "Criar ";
+								$actionUrl = 'admin/admin/createTurma';
+							};
+						?>
+						<?php echo $verb ?>Turma
+						</h3>
+						<div class="card-text">
+
+							<!-- <form autocomplete="off" action="#" th:action="@{/registration-company}" th:object="${company}" method="post" class="form" role="form"> -->
+							<?php echo form_open($actionUrl) ?>
+
+							<input type="text" name="id" value="<?php if($action == 'editar') echo $class["id"] ?>" hidden />
+
+								<div class="form-row">
+									<div class="form-group col-md-4">
+										<label for="teacher-select">Professor</label>
+										<select class="custom-select" id="teacher-select"  name="teacher_id" required>
+											<?php echo $teacherDropdown ?>
+										</select>
+									</div>
+									<!-- TODO implementar ajax para pegar matéria de acordo com o professor -->
+									<div class="form-group col-md-4">
+										<label for="subject-select">Matéria</label>
+										<select class="custom-select" id="subject-select" name="subject_id" required>
+											<?php echo $subjectDropdown ?>
+										</select>
+									</div>
+									<div class="form-group col-md-4">
+										<label for="period-select">Período</label>
+										<select class="custom-select" id="period-select" name="period_id" required>
+											<?php echo $periodDropdown ?>
+										</select>
+									</div>
+								</div>
+								<hr />
+								<div class="form-row">
+									<div class="form-group col-md-4">
+										<label for="name-input">Campus</label>
+										<input type="text" placeholder="Praia Vermelha" class="form-control" id="campus-input" name="campus" required />
+									</div>
+									<div class="form-group col-md-4">
+										<label for="name-input">Prédio</label>
+										<input type="text" placeholder="Instituto De Computação" class="form-control" id="building-input" name="building" required />
+									</div>
+									<div class="form-group col-md-4">
+										<label for="name-input">Endereço</label>
+										<input type="text" placeholder="Rua Das Coves" class="form-control" id="address-input" name="address" required />
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="form-group col-md-4">
+										<label for="name-input">Número</label>
+										<input type="text" placeholder="1000" class="form-control" id="number-input" name="number" required />
+									</div>
+									<div class="form-group col-md-4">
+										<label for="period-select">Tipo de Sala</label>
+										<select class="custom-select" id="room-type-select" name="room-type-select">
+											<option selected value="1">Sala</option>
+											<option value="2">Laboratório</option>
+										</select>
+									</div>
+								</div>
+								<hr />
+								<div class="form-row">
+									<div class="col-md-6 form-group mt-4">
+										<div class="form-check form-check-inline ">
+											<input class="form-check-input" type="checkbox" name="weekDayOptions1" id="firstWeekDay1" value="1">
+											<label class="form-check-label" for="firstWeekDay1">Segunda</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="weekDayOptions2" id="firstWeekDay2" value="2">
+											<label class="form-check-label" for="firstWeekDay2">Terça</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="weekDayOptions3" id="firstWeekDay3" value="3">
+											<label class="form-check-label" for="firstWeekDay3">Quarta</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="weekDayOptions4" id="firstWeekDay4" value="4">
+											<label class="form-check-label" for="firstWeekDay4">Quinta</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="weekDayOptions5" id="firstWeekDay5" value="5">
+											<label class="form-check-label" for="firstWeekDay5">Sexta</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="weekDayOptions6" id="firstWeekDay6" value="6">
+											<label class="form-check-label" for="firstWeekDay6">Sábado</label>
+										</div>
+									</div>
+									<div class="form-group col-md-2">
+										<label for="name-input">Horário de Início</label>
+										<input type="time" placeholder="18:00" class="form-control" id="start-time-input" name="start_time" required />
+									</div>
+									<div class="form-group col-md-2">
+										<label for="name-input">Horário de Término</label>
+											<input type="time" placeholder="20:00" class="form-control" id="end-time-input" name="end_time" required />
+									</div>
+								</div>
+								<hr />
+								<div class="form-row">
+									<div class="form-group col-md-12">
+										<?php echo form_submit('', 'Salvar', "class='btn btn-primary btn-block'") ?>
+										<!-- <button type="submit" class="btn btn-primary btn-block">Salvar</button> -->
+									</div>
+								</div>
+								<?php echo form_close() ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php 
+	$teste = explode(', ', $class['dia']);
+	var_dump($teste);
+	?>
+	<script>
+		var teacher = document.getElementById('teacher-select');
+		var teacherCount = teacher.options.length;
+		var subject = document.getElementById('subject-select');
+		var subjectCount = subject.options.length;
+		var period = document.getElementById('period-select');
+		var periodCount = period.options.length;
+		var campus = document.getElementById('campus-input');
+		var predio = document.getElementById('building-input');
+		var endereco = document.getElementById('address-input');
+		var numero = document.getElementById('number-input');
+		var horario_ini = document.getElementById('start-time-input');
+		var horario_fim = document.getElementById('end-time-input');
+
+		<?php if (!empty($class)): ?>
+		for (var i=0; i<teacherCount; i++){
+			if(teacher.options[i].innerHTML == "<?php echo $class['professor'] ?>"){
+				teacher.options[i].selected = true;
+				break;
+			}
+		}
+		for (var i=0; i<subjectCount; i++) {
+			if (subject.options[i].innerHTML == "<?php echo $class['turma'] ?>") {
+				subject.options[i].selected = true;
+				break;
+			}
+		}
+		for (var i=0; i<periodCount; i++) {
+			if (period.options[i].innerHTML == "<?php echo $class['periodo'] ?>") {
+				period.options[i].selected = true;
+				break;
+			}
+		}
+		<?php
+		$dias = explode(", ", $class['dia']);
+		$optionDia[] = '';
+		$i = 0;
+		foreach($dias as $dia): ?>
+			if ("<?php echo $dia?>" == "Segunda"){
+				document.getElementById('firstWeekDay1').checked = true;
+			} else if ("<?php echo $dia?>" == "Terça"){
+				document.getElementById('firstWeekDay2').checked = true;
+			} else if ("<?php echo $dia?>" == "Quarta"){
+				document.getElementById('firstWeekDay3').checked = true;
+			}else if ("<?php echo $dia?>" == "Quinta"){
+				document.getElementById('firstWeekDay4').checked = true;
+			}else if ("<?php echo $dia?>" == "Sexta"){
+				document.getElementById('firstWeekDay5').checked = true;
+			}else if ("<?php echo $dia?>" == "Sábado"){
+				document.getElementById('firstWeekDay6').checked = true;
+			}
+		<?php endforeach; ?>
+		campus.value = "<?php echo $class['campus'] ?>";
+		predio.value = "<?php echo $class['predio'] ?>";
+		endereco.value = "<?php echo $class['endereco'] ?>";
+		numero.value = "<?php echo $class['sala'] ?>";
+		horario_ini.value = "<?php echo $class['horario_ini'] ?>";
+		horario_fim.value = "<?php echo $class['horario_fim'] ?>";
+
+		<?php endif;?>
+	</script>
+	<script type="application/javascript" src="<?php echo base_url('assets/js/jquery-3.3.1.min.js') ?>"></script>
+	<script type="application/javascript" src="<?php echo base_url('assets/js/popper.min.js') ?>"></script>
+	<script type="application/javascript" src="<?php echo base_url('assets/js/bootstrap.js') ?>"></script>
+
+</body>
+
+</html>
