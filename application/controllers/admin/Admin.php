@@ -166,15 +166,21 @@ class Admin extends CI_Controller
         foreach ($_POST as $key => $value) {
             $data[$key] = $this->input->post($key);
         }
+        $x = 0;
         $y = 0;
         for ($i = 1; $i <= 6; $i++) {
             if (isset($data['weekDayOptions' . $i])) {
-                $data['week_day'][$y] = $i;
-                $y++;
+                $data['week_day'][$x] = $i;
+                $x++;
             }
+            if ($data['schedule-select'] == 2 && isset($data['2weekDayOptions' . $i])){
+                    $data['2week_day'][$y] = $i;
+                    $y++;
+                }
         }
-        $this->Classroom_model->createClassroom($data);
-        redirect('admin/admin');
+        var_dump($data);
+        // $this->Classroom_model->createClassroom($data);
+        // redirect('admin/admin');
     }
     public function deleteTurma($id){
         $this->Classroom_model->deleteClassroom($id);

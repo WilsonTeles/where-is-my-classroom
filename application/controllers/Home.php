@@ -24,6 +24,7 @@ class Home extends CI_Controller
     {
         parent::__construct();
         $this->load->Model('Classroom_model');
+        $this->load->Model('Login_model');
     }
     public function index()
     {
@@ -36,15 +37,32 @@ class Home extends CI_Controller
         }
         $this->load->view('home.phtml', $data);
     }
-    public function login()
+    public function login($data = null)
     {
-        $this->load->view('login.phtml');
+        $this->load->view('login.phtml', $data);
     }
-    public function criarConta(){
+    public function forgotPassword()
+    {
+        $this->load->view('forgot_password.phtml');
+    }
+    public function resetPassword()
+    {
+        $email = $this->input->post('email');
+        $findemail = $this->Login_model->forgotPassword($email);
+        if ($findemail) {
+            $this->Login_model->sendpassword($findemail);
+        } else {
+            $this->session->set_flashdata('msg', ' Email not found!');
+            redirect(base_url() . 'home/forgotPassword', 'refresh');
+        }
+    }
+    public function criarConta()
+    {
         $this->load->view('criar_conta.phtml');
     }
 
-    public function salvarConta(){
+    public function salvarConta()
+    {
         $this->load->library('form_validation');
         $validLogin = false;
         $this->form_validation->set_rules('first_name', 'Nome', 'required');
@@ -64,7 +82,7 @@ class Home extends CI_Controller
             $data['is_admin'] = 0;
             $email = $this->db->get_where('user', array('email' => $data['email']))->row();
             $mat = $this->db->get_where('user', array('enrollment_code' => $data['enrollment_code']))->row();
-            if (isset($email) || isset($mat)){
+            if (isset($email) || isset($mat)) {
                 var_dump($email);
                 var_dump($mat);
             } else {
@@ -74,7 +92,6 @@ class Home extends CI_Controller
                 redirect('user/user');
             }
 
-            var_dump($data);
         }
     }
 
@@ -104,7 +121,7 @@ class Home extends CI_Controller
                 }
             } else {
                 $data['error'] = 'Login ou Senha Inválidos';
-                $this->load->view('home.phtml', $data);
+                $this->login($data);
             }
         }
     }

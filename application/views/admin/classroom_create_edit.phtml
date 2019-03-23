@@ -128,6 +128,16 @@
 								</div>
 								<hr />
 								<div class="form-row">
+								<div class="form-group col-md-4">
+										<label for="schedule-select">Horários Diferentes</label>
+										<select class="custom-select" id="schedule-select" name="schedule-select">
+											<option selected value="1">1</option>
+											<option value="2">2</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-row">
 									<div class="col-md-6 form-group mt-4">
 										<div class="form-check form-check-inline ">
 											<input class="form-check-input" type="checkbox" name="weekDayOptions1" id="firstWeekDay1" value="1">
@@ -163,6 +173,44 @@
 											<input type="time" placeholder="20:00" class="form-control" id="end-time-input" name="end_time" required />
 									</div>
 								</div>
+								<br/>
+								<div class="form-row" id="second-row">
+									<div class="col-md-6 form-group mt-4">
+										<div class="form-check form-check-inline ">
+											<input class="form-check-input" type="checkbox" name="2weekDayOptions1" id="2firstWeekDay1" value="1">
+											<label class="form-check-label" for="2firstWeekDay1">Segunda</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="2weekDayOptions2" id="2firstWeekDay2" value="2">
+											<label class="form-check-label" for="2firstWeekDay2">Terça</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="2weekDayOptions3" id="2firstWeekDay3" value="3">
+											<label class="form-check-label" for="2firstWeekDay3">Quarta</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="2weekDayOptions4" id="2firstWeekDay4" value="4">
+											<label class="form-check-label" for="2firstWeekDay4">Quinta</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="2weekDayOptions5" id="2firstWeekDay5" value="5">
+											<label class="form-check-label" for="2firstWeekDay5">Sexta</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="checkbox" name="2weekDayOptions6" id="2firstWeekDay6" value="6">
+											<label class="form-check-label" for="2firstWeekDay6">Sábado</label>
+										</div>
+									</div>
+									<div class="form-group col-md-2">
+										<label for="name-input">Horário de Início</label>
+										<input type="time" placeholder="18:00" class="form-control" id="2start-time-input" name="2start_time" required />
+									</div>
+									<div class="form-group col-md-2">
+										<label for="name-input">Horário de Término</label>
+											<input type="time" placeholder="20:00" class="form-control" id="2end-time-input" name="2end_time" required />
+									</div>
+								</div>
+
 								<hr />
 								<div class="form-row">
 									<div class="form-group col-md-12">
@@ -178,8 +226,8 @@
 		</div>
 	</div>
 	<?php 
-	$teste = explode(', ', $class['dia']);
-	var_dump($teste);
+	// $teste = explode(', ', $class['dia']);
+	// var_dump($teste);
 	?>
 	<script>
 		var teacher = document.getElementById('teacher-select');
@@ -241,6 +289,43 @@
 		horario_fim.value = "<?php echo $class['horario_fim'] ?>";
 
 		<?php endif;?>
+		var linha = document.querySelector('#second-row');
+		var period = document.querySelector('#schedule-select');
+		period.addEventListener('change', function(event){
+			if (period.value == 1){
+				linha.style.display = "none";
+				document.getElementById('2start-time-input').value = '00:00';
+				document.getElementById('2end-time-input').value = '00:01';
+				document.getElementById('2firstWeekDay1').checked = true;
+			} else {
+				linha.style.display = "flex";
+				document.getElementById('2start-time-input').value = '';
+				document.getElementById('2end-time-input').value = '';
+				for(i = 1; i <= 6; i++){
+					var c = '2firstWeekDay';
+					c += i;
+					document.getElementById(c).checked = false;
+				}
+			}
+		}, false);
+		function segundoHorario(){
+			if (period.value == 1){
+				linha.style.display = "none";
+				document.getElementById('2start-time-input').value = '00:00';
+				document.getElementById('2end-time-input').value = '00:01';
+				document.getElementById('2firstWeekDay1').checked = true;
+			} else {
+				linha.style.display = "flex";
+				document.getElementById('2start-time-input').value = '';
+				document.getElementById('2end-time-input').value = '';
+				for(i = 1; i <= 6; i++){
+					var c = '2firstWeekDay';
+					c += i;
+					document.getElementById(c).checked = false;
+				}
+			}
+		}
+		window.onload = segundoHorario;
 	</script>
 	<script type="application/javascript" src="<?php echo base_url('assets/js/jquery-3.3.1.min.js') ?>"></script>
 	<script type="application/javascript" src="<?php echo base_url('assets/js/popper.min.js') ?>"></script>
