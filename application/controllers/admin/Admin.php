@@ -1,5 +1,5 @@
 <?php
-//defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin extends CI_Controller
 {
@@ -151,7 +151,7 @@ class Admin extends CI_Controller
         foreach ($_POST as $key => $value) {
             $data[$key] = $this->input->post($key);
         }
-        $y =0;
+        $y = 0;
         for ($i = 1; $i <= 6; $i++) {
             if (isset($data['weekDayOptions' . $i])) {
                 $data['week_day'][$y] = $i;
@@ -159,6 +159,7 @@ class Admin extends CI_Controller
             }
         }
         $this->Classroom_model->updateClassroom($data);
+        $this->sendEmail($data['id']);
         redirect('admin/admin');
     }
     public function createTurma()
@@ -173,17 +174,53 @@ class Admin extends CI_Controller
                 $data['week_day'][$x] = $i;
                 $x++;
             }
-            if ($data['schedule-select'] == 2 && isset($data['2weekDayOptions' . $i])){
-                    $data['2week_day'][$y] = $i;
-                    $y++;
-                }
+            if ($data['schedule-select'] == 2 && isset($data['2weekDayOptions' . $i])) {
+                $data['2week_day'][$y] = $i;
+                $y++;
+            }
         }
         var_dump($data);
         // $this->Classroom_model->createClassroom($data);
         // redirect('admin/admin');
     }
-    public function deleteTurma($id){
+    public function deleteTurma($id)
+    {
         $this->Classroom_model->deleteClassroom($id);
         redirect('admin/admin');
+    }
+    public function sendEmail($cid)
+    {
+        $classroomName = $this->Classroom_model->getClassroomName($cid);
+        $result = $this->Classroom_model->getEmailByClassroom($cid);
+        foreach ($result->result() as $row) {
+            $mail_message = 'Dear ' . $row->name . ',' . "\r\n";
+            $mail_message .= 'A Turma <b>' . $classroomName->name . '</b> foi atualizada!';
+            $mail_message .= '<br>Por favor, acesse o site <a>http://localhost/where-is-my-classroom</a> e confira!.';
+            $mail_message .= '<br>Thanks & Regards';
+            $mail_message .= '<br>Your company name';
+            date_default_timezone_set('Etc/UTC');
+            $this->load->library("phpmailer_library");
+            $mail = $this->phpmailer_library->load();
+            $mail->isSMTP();
+            $mail->SMTPSecure = "tls";
+            $mail->Debugoutput = 'html';
+            $mail->Host = "smtp.live.com";
+            $mail->Port = 587;
+            $mail->SMTPAuth = true;
+            $mail->Username = "wjmarcolin@hotmail.com";
+            $mail->Password = "Wilson010695";
+            $mail->setFrom('wjmarcolin@hotmail.com', 'admin');
+            $mail->IsHTML(true);
+            $mail->addAddress($row->email);
+            $mail->Subject = 'OTP from company';
+            $mail->Body = $mail_message;
+            $mail->AltBody = $mail_message;
+            if (!$mail->send()) {
+                $this->session->set_flashdata('msg', 'Failed to send password, please try again!');
+            } else {
+                $this->session->set_flashdata('msg', 'Password sent to your email!');
+            }
+        }
+        return;
     }
 }

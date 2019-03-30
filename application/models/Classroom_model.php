@@ -364,5 +364,12 @@ class Classroom_model extends CI_Model
         $this->db->delete('student_classroom', $data);
 
     }
+    public function getEmailByClassroom($cid){
+        $this->db->select('user.email as email, user.first_name as name', false);
+        $this->db->from('student_classroom');
+        $this->db->join('user', 'user.id = student_classroom.user_id');
+        $this->db->where('student_classroom.classroom_id', $cid);
+        return $this->db->get();
+    }
 
 }
