@@ -18,6 +18,12 @@ class Login_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
+    public function changePassword($data){
+        $data['change_password'] = 0;
+        $this->db->where('id', $data['id']);
+        $this->db->update('user', $data);
+        return;
+    }
     public function sendpassword($data)
     {
         $email = $data['email'];
@@ -27,6 +33,7 @@ class Login_model extends CI_Model
             $passwordplain = "";
             $passwordplain = rand(999999999, 9999999999);
             $newpass['password'] = $passwordplain;// md5($passwordplain);
+            $newpass['change_password'] = 1;
             $this->db->where('email', $email);
             $this->db->update('user', $newpass);
             $mail_message = 'Dear ' . $row[0]['first_name'] . ',' . "\r\n";

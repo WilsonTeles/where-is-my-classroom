@@ -56,6 +56,18 @@ class Home extends CI_Controller
             redirect(base_url() . 'home/forgotPassword', 'refresh');
         }
     }
+    public function changePassword($data = null)
+    {
+        if (isset($data)) {
+            $this->load->view('change_password.phtml', $data);
+        } else {
+            foreach ($_POST as $key => $value) {
+                $data[$key] = $this->input->post($key);
+            }
+            $this->Login_model->changePassword($data);
+            redirect('user/user');
+        }
+    }
     public function criarConta($data = null)
     {
         $this->load->view('criar_conta.phtml', $data);
@@ -91,7 +103,6 @@ class Home extends CI_Controller
                 $this->session->set_userdata($session);
                 redirect('user/user');
             }
-
         }
     }
 
@@ -114,7 +125,9 @@ class Home extends CI_Controller
             if (isset($row)) {
                 $data = array('user_id' => $row->id, 'user_firstname' => $row->first_name, 'is_admin' => $row->is_admin, 'logged' => true);
                 $this->session->set_userdata($data);
-                if ($row->is_admin == 1) {
+                if ($row->change_password) {
+                    $this->changePassword($data);
+                } else if ($row->is_admin == 1) {
                     redirect('admin/admin');
                 } else {
                     redirect('user/user');
@@ -166,5 +179,4 @@ class Home extends CI_Controller
         }
         return $table;
     }
-
 }
