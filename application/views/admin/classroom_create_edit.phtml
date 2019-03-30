@@ -125,6 +125,10 @@
 											<option value="2">Laboratório</option>
 										</select>
 									</div>
+									<div class="form-group col-md-4">
+										<label for="name-input">Google Maps</label>
+										<input type="textarea" placeholder="iFrame do Google Maps pequeno" class="form-control" id="maps_info" name="maps_info" required />
+									</div>
 								</div>
 								<hr />
 								<div class="form-row">
@@ -215,7 +219,6 @@
 								<div class="form-row">
 									<div class="form-group col-md-12">
 										<?php echo form_submit('', 'Salvar', "class='btn btn-primary btn-block'") ?>
-										<!-- <button type="submit" class="btn btn-primary btn-block">Salvar</button> -->
 									</div>
 								</div>
 								<?php echo form_close() ?>
@@ -225,10 +228,6 @@
 			</div>
 		</div>
 	</div>
-	<?php 
-	// $teste = explode(', ', $class['dia']);
-	// var_dump($teste);
-	?>
 	<script>
 		var teacher = document.getElementById('teacher-select');
 		var teacherCount = teacher.options.length;
@@ -240,6 +239,7 @@
 		var predio = document.getElementById('building-input');
 		var endereco = document.getElementById('address-input');
 		var numero = document.getElementById('number-input');
+		var maps = document.getElementById('maps_info');
 		var horario_ini = document.getElementById('start-time-input');
 		var horario_fim = document.getElementById('end-time-input');
 
@@ -287,6 +287,7 @@
 		numero.value = "<?php echo $class['sala'] ?>";
 		horario_ini.value = "<?php echo $class['horario_ini'] ?>";
 		horario_fim.value = "<?php echo $class['horario_fim'] ?>";
+		maps.value = '<?php echo $class['maps'] ?>';
 
 		<?php endif;?>
 		var linha = document.querySelector('#second-row');

@@ -105,6 +105,7 @@ class Classroom_model extends CI_Model
                 'sala' => $row->number,
                 'endereco' => $row->address,
                 'periodo' => $row->period,
+                'maps' =>$row->maps_info
             );
             $i++;
         }
@@ -206,6 +207,7 @@ class Classroom_model extends CI_Model
             'number' => $data["number"],
             'address' => $data["address"],
             'period_id' => $data["period_id"],
+            'maps_info' => $data["maps_info"]
         );
         $this->db->where('id', $data["id"]);
         $this->db->update('classroom', $values);
