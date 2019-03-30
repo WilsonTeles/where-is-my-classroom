@@ -211,7 +211,6 @@ class Classroom_model extends CI_Model
         $this->db->update('classroom', $values);
 
         $this->db->delete('classroom_week_day', array('classroom_id' => $data["id"]));
-        var_dump($data);
         $count = count($data['week_day']);
         for ($i = 0; $i < $count; $i++) {
             $time = array(

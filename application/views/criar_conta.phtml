@@ -23,6 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     if (isset($error)) { ?>
                         <h4 style="color:red"><?php echo $error; ?> </h4>
                     <?php
+                        unset($error);
                 } ?>
                     <?php echo form_open('home/salvarConta'); ?>
                     <div class="form-group">

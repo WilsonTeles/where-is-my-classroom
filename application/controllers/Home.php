@@ -56,9 +56,9 @@ class Home extends CI_Controller
             redirect(base_url() . 'home/forgotPassword', 'refresh');
         }
     }
-    public function criarConta()
+    public function criarConta($data = null)
     {
-        $this->load->view('criar_conta.phtml');
+        $this->load->view('criar_conta.phtml', $data);
     }
 
     public function salvarConta()
@@ -83,8 +83,8 @@ class Home extends CI_Controller
             $email = $this->db->get_where('user', array('email' => $data['email']))->row();
             $mat = $this->db->get_where('user', array('enrollment_code' => $data['enrollment_code']))->row();
             if (isset($email) || isset($mat)) {
-                var_dump($email);
-                var_dump($mat);
+                $data['error'] = 'Email ou matrícula já cadastrado(s).';
+                $this->criarConta($data);
             } else {
                 $last_id = $this->Classroom_model->criarConta($data);
                 $session = array('user_id' => $last_id, 'user_firstname' => $data['first_name'], 'is_admin' => $data['is_admin'], 'logged' => true);
