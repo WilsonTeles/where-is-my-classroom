@@ -177,6 +177,11 @@ class Home extends CI_Controller
                 }
             }
         }
+        if (empty($userTable)){
+            for ($i = 0; $i < count($table); $i++){
+                $table[$i]['checked'] = '';
+            }
+        }
         return $table;
     }
 }

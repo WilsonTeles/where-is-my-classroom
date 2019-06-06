@@ -207,8 +207,8 @@ class Admin extends CI_Controller
             $mail->Host = "smtp.live.com";
             $mail->Port = 587;
             $mail->SMTPAuth = true;
-            $mail->Username = "wjmarcolin@hotmail.com";
-            $mail->Password = "Wilson010695";
+            $mail->Username = "";
+            $mail->Password = "";
             $mail->setFrom('wjmarcolin@hotmail.com', 'admin');
             $mail->IsHTML(true);
             $mail->addAddress($row->email);
